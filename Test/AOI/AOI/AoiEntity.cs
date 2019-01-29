@@ -4,13 +4,13 @@ namespace AOI
 {
     public struct AoiInfo
     {
-        public HashSet<AoiNode> MovesSet;
+        public HashSet<long> MovesSet;
 
-        public HashSet<AoiNode> MoveOnlySet;
+        public HashSet<long> MoveOnlySet;
 
-        public HashSet<AoiNode> EntersSet;
+        public HashSet<long> EntersSet;
 
-        public HashSet<AoiNode> LeavesSet; 
+        public HashSet<long> LeavesSet; 
     }
 
     public struct AoiLink

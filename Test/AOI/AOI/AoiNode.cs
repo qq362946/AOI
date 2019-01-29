@@ -19,7 +19,7 @@ namespace AOI
 
             Position = new Vector2(x, y);
 
-            AoiInfo = new AoiInfo {MovesSet = new HashSet<AoiNode>(), MoveOnlySet = new HashSet<AoiNode>()};
+            AoiInfo = new AoiInfo {MovesSet = new HashSet<long>(), MoveOnlySet = new HashSet<long>()};
 
             Link = new AoiLink();
 

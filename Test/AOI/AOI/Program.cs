@@ -29,28 +29,28 @@ namespace AOI
             
             foreach (var aoiNode in role2.AoiInfo.MovesSet)
             {
-                Console.WriteLine(aoiNode.Position);
+                Console.WriteLine(aoi.GetAoiNode(aoiNode).Position);
             }
             
             Console.WriteLine($"玩家二进入列表");
             
             foreach (var aoiNode in role2.AoiInfo.EntersSet)
             {
-                Console.WriteLine(aoiNode.Position);
+                Console.WriteLine(aoi.GetAoiNode(aoiNode).Position);
             }
             
             Console.WriteLine($"玩家二离开列表");
             
             foreach (var aoiNode in role2.AoiInfo.LeavesSet)
             {
-                Console.WriteLine(aoiNode.Position);
+                Console.WriteLine(aoi.GetAoiNode(aoiNode).Position);
             }
             
             Console.WriteLine($"玩家二移动列表");
             
             foreach (var aoiNode in role2.AoiInfo.MoveOnlySet)
             {
-                Console.WriteLine(aoiNode.Position);
+                Console.WriteLine(aoi.GetAoiNode(aoiNode).Position);
             }
         }
     }
