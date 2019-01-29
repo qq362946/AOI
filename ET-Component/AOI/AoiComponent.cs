@@ -268,7 +268,7 @@ namespace ETModel.AOI
                     {
                         if (Distance(node.Position, cur.Value.Position) <= area.X)
                         {
-                            if (!node.AoiInfo.MovesSet.Contains(cur.Value)) node.AoiInfo.MovesSet.Add(cur.Value);
+                            if (!node.AoiInfo.MovesSet.Contains(cur.Value.Id)) node.AoiInfo.MovesSet.Add(cur.Value.Id);
                         }
                     }
 
@@ -290,7 +290,7 @@ namespace ETModel.AOI
                     {
                         if (Distance(node.Position, cur.Value.Position) <= area.Y)
                         {
-                            if (!node.AoiInfo.MovesSet.Contains(cur.Value)) node.AoiInfo.MovesSet.Add(cur.Value);
+                            if (!node.AoiInfo.MovesSet.Contains(cur.Value.Id)) node.AoiInfo.MovesSet.Add(cur.Value.Id);
                         }
                     }
 
@@ -316,7 +316,7 @@ namespace ETModel.AOI
         /// </summary>
         /// <param name="id">一般是角色的ID等其他标识ID</param>
         /// <returns>需要通知的坐标列表</returns>
-        public AoiNode[] LeaveNode(long id)
+        public long[] LeaveNode(long id)
         {
             if (!_nodes.TryGetValue(id, out var node)) return null;
 
