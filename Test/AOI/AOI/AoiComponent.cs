@@ -316,17 +316,17 @@ namespace AOI
         public long[] LeaveNode(long id)
         {
             if (!_nodes.TryGetValue(id, out var node)) return null;
-
+            
             _xLinks.Remove(node.Link.XNode);
-
+            
             _yLinks.Remove(node.Link.YNode);
-
+           
             _nodes.Remove(id);
-
+            
             var aoiNodes = node.AoiInfo.MovesSet.ToArray();
             
             node.Dispose();
-
+            
             return aoiNodes;
         }
 

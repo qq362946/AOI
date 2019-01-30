@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -43,16 +44,16 @@ namespace AOI
         {
             Id = 0;
             
-            Link.XNode = null;
-
-            Link.YNode = null;
-            
             AoiPool.Instance.Recycle(Link.XNode);
             
             AoiPool.Instance.Recycle(Link.YNode);
             
+            Link.XNode = null;
+
+            Link.YNode = null;
+            
             AoiInfo.MovesSet.Clear();
-                
+            
             AoiInfo.MoveOnlySet.Clear();
             
             AoiPool.Instance.Recycle(this);
