@@ -9,9 +9,9 @@ namespace AOI
     {
         private readonly Dictionary<long, AoiNode> _nodes = new Dictionary<long, AoiNode>();
 
-        public readonly AoiNodeLinkedList _xLinks = new AoiNodeLinkedList(10, AoiNodeLinkedListType.XLink);
+        private readonly AoiNodeLinkedList _xLinks = new AoiNodeLinkedList(10, AoiNodeLinkedListType.XLink);
         
-        public readonly AoiNodeLinkedList _yLinks = new AoiNodeLinkedList(10, AoiNodeLinkedListType.YLink);
+        private readonly AoiNodeLinkedList _yLinks = new AoiNodeLinkedList(10, AoiNodeLinkedListType.YLink);
 
         public void Awake(){}
 
@@ -26,7 +26,7 @@ namespace AOI
         {
             if (_nodes.TryGetValue(id, out var node)) return node;
 
-            node = new AoiNode().Init(id, x, y);
+            node = AoiPool.Instance.Fetch<AoiNode>().Init(id, x, y);
 
             _xLinks.Insert(node);
 
@@ -324,6 +324,8 @@ namespace AOI
             _nodes.Remove(id);
 
             var aoiNodes = node.AoiInfo.MovesSet.ToArray();
+            
+            node.Dispose();
 
             return aoiNodes;
         }

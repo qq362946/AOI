@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace AOI
 {
@@ -10,7 +11,7 @@ namespace AOI
 
         public HashSet<long> EntersSet;
 
-        public HashSet<long> LeavesSet; 
+        public HashSet<long> LeavesSet;
     }
 
     public struct AoiLink

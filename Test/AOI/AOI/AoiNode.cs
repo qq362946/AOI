@@ -19,20 +19,43 @@ namespace AOI
 
             Position = new Vector2(x, y);
 
-            AoiInfo = new AoiInfo {MovesSet = new HashSet<long>(), MoveOnlySet = new HashSet<long>()};
+            if (AoiInfo.MovesSet == null)
+            {
+                AoiInfo.MovesSet = new HashSet<long>();
+            }
 
-            Link = new AoiLink();
+            if (AoiInfo.MoveOnlySet == null)
+            {
+                AoiInfo.MoveOnlySet = new HashSet<long>();
+            }
 
             return this;
         }
 
-        public Vector2 SetPosition(float x, float y)
+        public void SetPosition(float x, float y)
         {
             Position.X = x;
 
             Position.Y = y;
+        }
 
-            return Position;
+        public void Dispose()
+        {
+            Id = 0;
+            
+            Link.XNode = null;
+
+            Link.YNode = null;
+            
+            AoiPool.Instance.Recycle(Link.XNode);
+            
+            AoiPool.Instance.Recycle(Link.YNode);
+            
+            AoiInfo.MovesSet.Clear();
+                
+            AoiInfo.MoveOnlySet.Clear();
+            
+            AoiPool.Instance.Recycle(this);
         }
     }
 }
