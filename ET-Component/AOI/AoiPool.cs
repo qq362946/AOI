@@ -27,6 +27,22 @@ namespace ETModel.AOI
             return (T) Activator.CreateInstance(type);
         }
 
+        public T Fetch<T>(params object[] args) where T : class
+        {
+            var type = typeof(T);
+
+            if (_dic.TryGetValue(type, out var queue))
+            {
+                return queue.Count > 0 ? (T) queue.Dequeue() : (T) Activator.CreateInstance(type, args);
+            }
+
+            queue = new Queue<object>();
+
+            _dic.Add(type, queue);
+
+            return (T) Activator.CreateInstance(type, args);
+        }
+
         public void Recycle(object obj)
         {
             var type = obj.GetType();

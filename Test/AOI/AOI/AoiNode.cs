@@ -13,6 +13,8 @@ namespace AOI
         public AoiInfo AoiInfo;
 
         public AoiLink Link;
+        
+        public AoiNode(){}
 
         public AoiNode Init(long id, float x, float y)
         {
