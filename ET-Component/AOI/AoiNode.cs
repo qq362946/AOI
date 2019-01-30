@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace ETModel.AOI
 {
-    public class AoiNode : Component
+    public class AoiNode
     {
         public long Id;
 
@@ -16,38 +16,46 @@ namespace ETModel.AOI
         public AoiNode Init(long id, float x, float y)
         {
             Id = id;
-            
+
             Position = new Vector2(x, y);
 
-            AoiInfo = new AoiInfo { MovesSet = new HashSet<long>(), MoveOnlySet = new HashSet<long>() };
+            if (AoiInfo.MovesSet == null)
+            {
+                AoiInfo.MovesSet = new HashSet<long>();
+            }
 
-            Link = new AoiLink();
+            if (AoiInfo.MoveOnlySet == null)
+            {
+                AoiInfo.MoveOnlySet = new HashSet<long>();
+            }
 
             return this;
         }
 
-        public Vector2 SetPosition(float x, float y)
+        public void SetPosition(float x, float y)
         {
             Position.X = x;
 
             Position.Y = y;
-
-            return Position;
         }
 
-        public override void Dispose()
+        public void Dispose()
         {
-            if (this.IsDisposed) return;
-
-            AoiInfo.Dispose();
-
-            Link.Dispose();
-
             Id = 0;
             
-            Position = Vector2.Zero;
+            Link.XNode = null;
 
-            base.Dispose();
+            Link.YNode = null;
+            
+            AoiPool.Instance.Recycle(Link.XNode);
+            
+            AoiPool.Instance.Recycle(Link.YNode);
+            
+            AoiInfo.MovesSet.Clear();
+                
+            AoiInfo.MoveOnlySet.Clear();
+            
+            AoiPool.Instance.Recycle(this);
         }
     }
 }

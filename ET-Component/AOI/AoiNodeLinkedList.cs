@@ -74,7 +74,8 @@ namespace ETModel.AOI
 
                             if (slowCursor.Value.Position.X >= node.Position.X)
                             {
-                                node.Link.XNode = AddBefore(slowCursor, node);
+                                node.Link.XNode = AddBefore(slowCursor,
+                                    AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>().Value = node);
 
                                 return;
                             }
@@ -128,7 +129,8 @@ namespace ETModel.AOI
 
                             if (slowCursor.Value.Position.Y >= node.Position.Y)
                             {
-                                node.Link.YNode = AddBefore(slowCursor, node);
+                                node.Link.YNode = AddBefore(slowCursor,
+                                    AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>().Value = node);
 
                                 return;
                             }

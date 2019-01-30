@@ -11,17 +11,6 @@ namespace ETModel.AOI
         public HashSet<long> EntersSet;
 
         public HashSet<long> LeavesSet;
-
-        public void Dispose()
-        {
-            MovesSet?.Clear();
-
-            MoveOnlySet?.Clear();
-
-            EntersSet?.Clear();
-
-            LeavesSet?.Clear();
-        }
     }
 
     public struct AoiLink
@@ -29,12 +18,5 @@ namespace ETModel.AOI
         public LinkedListNode<AoiNode> XNode;
 
         public LinkedListNode<AoiNode> YNode;
-
-        public void Dispose()
-        {
-            XNode = null;
-
-            YNode = null;
-        }
     }
 }

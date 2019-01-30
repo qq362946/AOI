@@ -27,9 +27,7 @@ namespace ETModel.AOI
         {
             if (_nodes.TryGetValue(id, out var node)) return node;
 
-            node = ComponentFactory.Create<AoiNode>().Init(id, x, y);
-
-            node.Parent = this;
+            node = AoiPool.Instance.Fetch<AoiNode>().Init(id, x, y);
 
             _xLinks.Insert(node);
 
@@ -80,9 +78,9 @@ namespace ETModel.AOI
             node.AoiInfo.EntersSet = node.AoiInfo.MovesSet.Except(node.AoiInfo.MoveOnlySet).ToHashSet();
 
             node.AoiInfo.LeavesSet = node.AoiInfo.MoveOnlySet.Except(node.AoiInfo.MovesSet).ToHashSet();
-            
+
             node.AoiInfo.MoveOnlySet = node.AoiInfo.MoveOnlySet.Except(node.AoiInfo.EntersSet)
-                    .Except(node.AoiInfo.LeavesSet).ToHashSet();
+                .Except(node.AoiInfo.LeavesSet).ToHashSet();
 
             return node;
         }
@@ -336,21 +334,6 @@ namespace ETModel.AOI
         public double Distance(Vector2 a, Vector2 b)
         {
             return Math.Pow((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y), 0.5);
-        }
-
-        public override void Dispose()
-        {
-            if (this.IsDisposed) return;
-
-            _nodes.ForEach(d => d.Value.Dispose());
-
-            _nodes.Clear();
-
-            _xLinks.Clear();
-
-            _yLinks.Clear();
-
-            base.Dispose();
         }
     }
 }
