@@ -41,7 +41,7 @@ namespace AOI
         {
             if (First == null)
             {
-                node.Link.XNode = AddFirst(node);
+                node.Link.XNode = AddFirst(AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node).Value);
             }
             else
             {
@@ -87,7 +87,7 @@ namespace AOI
 
                 if (node.Link.XNode == null)
                 {
-                    node.Link.XNode = AddLast(node);
+                    node.Link.XNode = AddLast(AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node).Value);
                 }
             }
         }
@@ -96,7 +96,7 @@ namespace AOI
         {
             if (First == null)
             {
-                node.Link.YNode = AddFirst(node);
+                node.Link.YNode = AddFirst(AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node).Value);
             }
             else
             {
@@ -142,7 +142,7 @@ namespace AOI
 
                 if (node.Link.YNode == null)
                 {
-                    node.Link.YNode = AddLast(node);
+                    node.Link.YNode = AddLast(AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node).Value);
                 }
             }
         }
