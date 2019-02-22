@@ -9,7 +9,7 @@ namespace AOI
     {
         private readonly Dictionary<long, AoiNode> _nodes = new Dictionary<long, AoiNode>();
 
-        public readonly AoiNodeLinkedList _xLinks = new AoiNodeLinkedList(10, AoiNodeLinkedListType.XLink);
+        private readonly AoiNodeLinkedList _xLinks = new AoiNodeLinkedList(10, AoiNodeLinkedListType.XLink);
         
         private readonly AoiNodeLinkedList _yLinks = new AoiNodeLinkedList(10, AoiNodeLinkedListType.YLink);
 
@@ -45,9 +45,9 @@ namespace AOI
         /// <param name="x">X轴位置</param>
         /// <param name="y">Y轴位置</param>
         /// <returns></returns>
-        public AoiNode UpdateNode(long id, Vector2 area, float x, float y)
+        public AoiNode Update(long id, Vector2 area, float x, float y)
         {
-            return !_nodes.TryGetValue(id, out var node) ? null : UpdateNode(node, area, x, y);
+            return !_nodes.TryGetValue(id, out var node) ? null : Update(node, area, x, y);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace AOI
         /// <param name="x">X轴位置</param>
         /// <param name="y">Y轴位置</param>
         /// <returns></returns>
-        public AoiNode UpdateNode(AoiNode node, Vector2 area, float x, float y)
+        public AoiNode Update(AoiNode node, Vector2 area, float x, float y)
         {
             // 把新的AOI节点转移到旧的节点里
 
@@ -70,7 +70,7 @@ namespace AOI
 
             // 查找周围坐标
 
-            FindAoi(node, area);
+            Find(node, area);
 
             // 差集计算
 
@@ -82,6 +82,11 @@ namespace AOI
                 .Except(node.AoiInfo.LeavesSet).ToHashSet();
 
             return node;
+        }
+        
+        public AoiNode Update(AoiNode node, Vector2 area)
+        {
+            return Update(node, area, node.Position.X, node.Position.Y);
         }
 
         /// <summary>
@@ -138,7 +143,7 @@ namespace AOI
                             
                             node.Position.X = x;
                             
-                            node.Link.XNode = _xLinks.AddBefore(cur, node);
+                            node.Link.XNode = _xLinks.AddAfter(cur, node);
 
                             break;
                         }
@@ -237,9 +242,9 @@ namespace AOI
         /// </summary>
         /// <param name="id">一般是角色的ID等其他标识ID</param>
         /// <param name="area">区域距离</param>
-        public AoiNode FindAoi(long id, Vector2 area)
+        private AoiNode Find(long id, Vector2 area)
         {
-            return !_nodes.TryGetValue(id, out var node) ? null : FindAoi(node, area);
+            return !_nodes.TryGetValue(id, out var node) ? null : Find(node, area);
         }
 
         /// <summary>
@@ -247,7 +252,7 @@ namespace AOI
         /// </summary>
         /// <param name="node">Aoi节点</param>
         /// <param name="area">区域距离</param>
-        public AoiNode FindAoi(AoiNode node, Vector2 area)
+        private AoiNode Find(AoiNode node, Vector2 area)
         {
             node.AoiInfo.MovesSet.Clear();
             
@@ -303,7 +308,7 @@ namespace AOI
         /// </summary>
         /// <param name="id">一般是角色的ID等其他标识ID</param>
         /// <returns></returns>
-        public AoiNode GetAoiNode(long id)
+        public AoiNode GetNode(long id)
         {
             return _nodes.TryGetValue(id, out var node) ? node : null;
         }
