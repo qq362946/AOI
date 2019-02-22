@@ -55,7 +55,7 @@ namespace ETModel.AOI
                     {
                         // 移动快指针
 
-                        var fastCursor = FastCursor(i * skip, skip);
+                        var fastCursor = FastCursor(skip, slowCursor?.Value);
 
                         // 如果快指针的值小于插入的值，把快指针赋给慢指针，当做当前指针。
 
@@ -68,14 +68,13 @@ namespace ETModel.AOI
 
                         // 慢指针移动到快指针位置
 
-                        while (slowCursor != fastCursor)
+                        while (slowCursor != null)
                         {
-                            if (slowCursor == null) break;
-
                             if (slowCursor.Value.Position.X >= node.Position.X)
                             {
-                                node.Link.XNode = AddBefore(slowCursor,
-                                    AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node).Value);
+                                node.Link.XNode = AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node);
+
+                                AddBefore(slowCursor,  node.Link.XNode);
 
                                 return;
                             }
@@ -110,7 +109,7 @@ namespace ETModel.AOI
                     {
                         // 移动快指针
 
-                        var fastCursor = FastCursor(i * skip, skip);
+                        var fastCursor = FastCursor(skip, slowCursor?.Value);
 
                         // 如果快指针的值小于插入的值，把快指针赋给慢指针，当做当前指针。
 
@@ -123,14 +122,13 @@ namespace ETModel.AOI
 
                         // 慢指针移动到快指针位置
 
-                        while (slowCursor != fastCursor)
+                        while (slowCursor != null)
                         {
-                            if (slowCursor == null) break;
-
                             if (slowCursor.Value.Position.Y >= node.Position.Y)
                             {
-                                node.Link.YNode = AddBefore(slowCursor,
-                                    AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node).Value);
+                                node.Link.YNode = AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node);
+
+                                AddBefore(slowCursor,  node.Link.YNode);
 
                                 return;
                             }
@@ -145,25 +143,40 @@ namespace ETModel.AOI
                     node.Link.YNode = AddLast(AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node).Value);
                 }
             }
-        }
+        }        
 
         #endregion
 
-        private LinkedListNode<AoiNode> FastCursor(int start, int end)
+        private LinkedListNode<AoiNode> FastCursor(int skip, AoiNode currentNode)
         {
-            var countIndex = start + end;
+            var skipLink = currentNode;
 
-            if (_linkedListType == AoiNodeLinkedListType.XLink)
+            switch (_linkedListType)
             {
-                return countIndex <= Count
-                    ? this.ElementAt(countIndex - 1).Link.XNode
-                    : this.ElementAt((countIndex - (countIndex - Count)) - 1).Link.XNode;
-            }
-            else
-            {
-                return countIndex <= Count
-                    ? this.ElementAt(countIndex - 1).Link.YNode
-                    : this.ElementAt((countIndex - (countIndex - Count)) - 1).Link.YNode;
+                case AoiNodeLinkedListType.XLink:
+                {
+                    for (var i = 1; i <= skip; i++)
+                    {
+                        if (skipLink.Link.XNode.Next == null) break;
+
+                        skipLink = skipLink.Link.XNode.Next.Value;
+                    }
+                
+                    return skipLink.Link.XNode;
+                }
+                case AoiNodeLinkedListType.YLink:
+                {
+                    for (var i = 1; i <= skip; i++)
+                    {
+                        if (skipLink.Link.YNode.Next == null) break;
+
+                        skipLink = skipLink.Link.YNode.Next.Value;
+                    }
+                
+                    return skipLink.Link.YNode;
+                }
+                default:
+                    return null;
             }
         }
     }

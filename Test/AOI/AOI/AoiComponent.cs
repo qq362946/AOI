@@ -9,7 +9,7 @@ namespace AOI
     {
         private readonly Dictionary<long, AoiNode> _nodes = new Dictionary<long, AoiNode>();
 
-        private readonly AoiNodeLinkedList _xLinks = new AoiNodeLinkedList(10, AoiNodeLinkedListType.XLink);
+        public readonly AoiNodeLinkedList _xLinks = new AoiNodeLinkedList(10, AoiNodeLinkedListType.XLink);
         
         private readonly AoiNodeLinkedList _yLinks = new AoiNodeLinkedList(10, AoiNodeLinkedListType.YLink);
 

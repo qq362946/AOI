@@ -695,11 +695,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/sining/RiderProjects/AOI/AOI/AOI.csproj",
+      "projectUniqueName": "/Users/sining/MyCodes/AOI/Test/AOI/AOI/AOI.csproj",
       "projectName": "AOI",
-      "projectPath": "/Users/sining/RiderProjects/AOI/AOI/AOI.csproj",
+      "projectPath": "/Users/sining/MyCodes/AOI/Test/AOI/AOI/AOI.csproj",
       "packagesPath": "/Users/sining/.nuget/packages/",
-      "outputPath": "/Users/sining/RiderProjects/AOI/AOI/obj/",
+      "outputPath": "/Users/sining/MyCodes/AOI/Test/AOI/AOI/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
