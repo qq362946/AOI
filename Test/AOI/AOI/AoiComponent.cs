@@ -242,7 +242,7 @@ namespace AOI
         /// </summary>
         /// <param name="id">一般是角色的ID等其他标识ID</param>
         /// <param name="area">区域距离</param>
-        private AoiNode Find(long id, Vector2 area)
+        public AoiNode Find(long id, Vector2 area)
         {
             return !_nodes.TryGetValue(id, out var node) ? null : Find(node, area);
         }
@@ -252,7 +252,7 @@ namespace AOI
         /// </summary>
         /// <param name="node">Aoi节点</param>
         /// <param name="area">区域距离</param>
-        private AoiNode Find(AoiNode node, Vector2 area)
+        public AoiNode Find(AoiNode node, Vector2 area)
         {
             node.AoiInfo.MovesSet.Clear();
             
