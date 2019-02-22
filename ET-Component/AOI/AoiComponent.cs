@@ -150,7 +150,7 @@ namespace ETModel.AOI
                             
                             node.Position.X = x;
                             
-                            node.Link.XNode = _xLinks.AddBefore(cur, node);
+                            node.Link.XNode = _xLinks.AddAfter(cur, node);
 
                             break;
                         }
