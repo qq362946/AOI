@@ -251,7 +251,7 @@ namespace ETModel.AOI
         /// <param name="area">区域距离</param>
         private AoiNode Find(long id, Vector2 area)
         {
-            return !_nodes.TryGetValue(id, out var node) ? null : FindAoi(node, area);
+            return !_nodes.TryGetValue(id, out var node) ? null : Find(node, area);
         }
 
         /// <summary>
