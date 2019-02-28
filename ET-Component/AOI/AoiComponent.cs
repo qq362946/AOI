@@ -86,22 +86,21 @@ namespace ETModel.AOI
 
             // 差集计算
 
-            // 差集计算
-
             if (node.AoiInfo.MoveOnlySet.Any())
             {
                 node.AoiInfo.EntersSet = node.AoiInfo.MoveOnlySet.Any()
                     ? node.AoiInfo.MovesSet.Except(node.AoiInfo.MoveOnlySet).ToHashSet()
                     : new HashSet<long>();
             }
+            else
+            {
+                node.AoiInfo.EntersSet.Clear();
+            }
 
             node.AoiInfo.LeavesSet = node.AoiInfo.MoveOnlySet.Except(node.AoiInfo.MovesSet).ToHashSet();
 
-            if (node.AoiInfo.EntersSet != null)
-            {
-                node.AoiInfo.MoveOnlySet = node.AoiInfo.MoveOnlySet.Except(node.AoiInfo.EntersSet)
-                    .Except(node.AoiInfo.LeavesSet).ToHashSet();
-            }
+            node.AoiInfo.MoveOnlySet = node.AoiInfo.MoveOnlySet.Except(node.AoiInfo.EntersSet)
+                .Except(node.AoiInfo.LeavesSet).ToHashSet();
 
             return node;
         }
