@@ -74,12 +74,20 @@ namespace AOI
 
             // 差集计算
 
-            node.AoiInfo.EntersSet = node.AoiInfo.MovesSet.Except(node.AoiInfo.MoveOnlySet).ToHashSet();
+            if (node.AoiInfo.MoveOnlySet.Any())
+            {
+                node.AoiInfo.EntersSet = node.AoiInfo.MoveOnlySet.Any()
+                    ? node.AoiInfo.MovesSet.Except(node.AoiInfo.MoveOnlySet).ToHashSet()
+                    : new HashSet<long>();
+            }
 
             node.AoiInfo.LeavesSet = node.AoiInfo.MoveOnlySet.Except(node.AoiInfo.MovesSet).ToHashSet();
 
-            node.AoiInfo.MoveOnlySet = node.AoiInfo.MoveOnlySet.Except(node.AoiInfo.EntersSet)
-                .Except(node.AoiInfo.LeavesSet).ToHashSet();
+            if (node.AoiInfo.EntersSet != null)
+            {
+                node.AoiInfo.MoveOnlySet = node.AoiInfo.MoveOnlySet.Except(node.AoiInfo.EntersSet)
+                    .Except(node.AoiInfo.LeavesSet).ToHashSet();
+            }
 
             return node;
         }

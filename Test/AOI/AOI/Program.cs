@@ -34,7 +34,7 @@ namespace AOI
             }
             
             Console.WriteLine($"玩家二进入列表");
-            
+
             foreach (var aoiNode in role2.AoiInfo.EntersSet)
             {
                 Console.WriteLine(aoi.GetNode(aoiNode).Position);

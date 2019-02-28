@@ -19,15 +19,11 @@ namespace ETModel.AOI
 
             Position = new Vector2(x, y);
 
-            if (AoiInfo.MovesSet == null)
-            {
-                AoiInfo.MovesSet = new HashSet<long>();
-            }
+            if (AoiInfo.MovesSet == null) AoiInfo.MovesSet = new HashSet<long>();
 
-            if (AoiInfo.MoveOnlySet == null)
-            {
-                AoiInfo.MoveOnlySet = new HashSet<long>();
-            }
+            if (AoiInfo.MoveOnlySet == null) AoiInfo.MoveOnlySet = new HashSet<long>();
+
+            if (AoiInfo.EntersSet == null) AoiInfo.EntersSet = new HashSet<long>();
 
             return this;
         }
