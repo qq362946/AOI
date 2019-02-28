@@ -25,6 +25,8 @@ namespace ETModel.AOI
 
             if (AoiInfo.EntersSet == null) AoiInfo.EntersSet = new HashSet<long>();
 
+            if (AoiInfo.LeavesSet == null) AoiInfo.LeavesSet = new HashSet<long>();
+
             return this;
         }
 

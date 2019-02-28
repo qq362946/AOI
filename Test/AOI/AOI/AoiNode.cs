@@ -27,6 +27,8 @@ namespace AOI
             if (AoiInfo.MoveOnlySet == null) AoiInfo.MoveOnlySet = new HashSet<long>();
 
             if (AoiInfo.EntersSet == null) AoiInfo.EntersSet = new HashSet<long>();
+            
+            if (AoiInfo.LeavesSet == null) AoiInfo.LeavesSet = new HashSet<long>();
 
             return this;
         }
