@@ -14,44 +14,23 @@ namespace AOI
     {
         static void Main(string[] args)
         {
-            var aoi = new AoiComponent();
+            var zone = new AoiZone();
 
-            var role1 = aoi.Enter(1, 12, 8);
-
-            Console.WriteLine($"玩家一ID:{role1.Id}");
-
-            var role2 = aoi.Enter(2, 12, 8);
-
-            Console.WriteLine($"玩家二ID:{role2.Id}");
-
-            aoi.Update(2, new Vector2(1, 1), 13, 8);  // 玩家二移动
-
-            Console.WriteLine($"玩家二周围列表");
-            
-            foreach (var aoiNode in role2.AoiInfo.MovesSet)
+            for (var i = 1; i <= 100000; i++)
             {
-                Console.WriteLine(aoi.GetNode(aoiNode).Position);
+                var ss = zone.Enter(i, i, i);
             }
-            
-            Console.WriteLine($"玩家二进入列表");
 
-            foreach (var aoiNode in role2.AoiInfo.EntersSet)
+            // 更新key为50的坐标
+
+            var entity = zone.Update(50, 3, 3, new Vector2(3, 3));
+
+            Console.WriteLine("---------------玩家可视范围列表--------------");
+
+            foreach (var aoiKey in entity.ViewEntity)
             {
-                Console.WriteLine(aoi.GetNode(aoiNode).Position);
-            }
-            
-            Console.WriteLine($"玩家二离开列表");
-            
-            foreach (var aoiNode in role2.AoiInfo.LeavesSet)
-            {
-                Console.WriteLine(aoi.GetNode(aoiNode).Position);
-            }
-            
-            Console.WriteLine($"玩家二移动列表");
-            
-            foreach (var aoiNode in role2.AoiInfo.MoveOnlySet)
-            {
-                Console.WriteLine(aoi.GetNode(aoiNode).Position);
+                var findEntity = zone[aoiKey];
+                Console.WriteLine($"X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
             }
         }
     }
