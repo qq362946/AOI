@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace AOI
@@ -19,6 +20,23 @@ namespace AOI
         /// <param name="key">key</param>
         /// <param name="x">X</param>
         /// <param name="y">Y</param>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        public AoiEntity Enter(long key, float x, float y, Vector2 area)
+        {
+            var entity = Enter(key, x, y);
+
+            Update(key, area);
+
+            return entity;
+        }
+        
+        /// <summary>
+        /// Add a new AoiZone
+        /// </summary>
+        /// <param name="key">key</param>
+        /// <param name="x">X</param>
+        /// <param name="y">Y</param>
         /// <returns></returns>
         public AoiEntity Enter(long key, float x, float y)
         {
@@ -30,6 +48,21 @@ namespace AOI
             entity.Y = _yLinks.Add(y, entity);
 
             _entityList.Add(key, entity);
+
+            return entity;
+        }
+
+        /// <summary>
+        /// Update the AoiEntity
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        public AoiEntity Update(long key, Vector2 area)
+        {
+            if (!_entityList.TryGetValue(key, out var entity)) return null;
+            
+            Find(ref entity, ref area);
 
             return entity;
         }
@@ -61,10 +94,16 @@ namespace AOI
             return entity;
         }
 
+        /// <summary>
+        /// Look for nodes in range
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="area"></param>
+        /// <returns>news entity</returns>
         private void Find(ref AoiEntity node, ref Vector2 area)
         {
-            node.ViewEntity.Clear();
-            
+            SwapViewEntity(ref node.ViewEntity, ref node.ViewEntityBak);
+
             #region xLinks
 
             for (var i = 0; i < 2; i++)
@@ -122,6 +161,36 @@ namespace AOI
             #endregion
         }
 
+        // /// <summary>
+        // /// Area to find
+        // /// </summary>
+        // /// <param name="area"></param>
+        // public IEnumerable<long> Find(Vector2 area)
+        // {
+        //     
+        // }
+
+        /// <summary>
+        /// SwapViewEntity
+        /// </summary>
+        /// <param name="viewEntity"></param>
+        /// <param name="viewEntityBak"></param>
+        private static void SwapViewEntity(
+            ref HashSet<long> viewEntity,
+            ref HashSet<long> viewEntityBak)
+        {
+            viewEntityBak.Clear();
+            var t3 = viewEntity;
+            viewEntity = viewEntityBak;
+            viewEntityBak = t3;
+        }
+
+        /// <summary>
+        /// Distance
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         private double Distance(Vector2 a, Vector2 b)
         {
             return Math.Pow((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y), 0.5);
