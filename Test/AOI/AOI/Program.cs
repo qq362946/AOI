@@ -22,11 +22,11 @@ namespace AOI
                 var ss = zone.Enter(i, i, i);
             }
 
-            var entity = zone.Update(50, area);
+            zone.Update(50, area, out var enters);
 
             Console.WriteLine("---------------加入玩家范围的玩家列表--------------");
 
-            foreach (var aoiKey in entity.Enter)
+            foreach (var aoiKey in enters)
             {
                 var findEntity = zone[aoiKey];
                 Console.WriteLine($"X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
@@ -34,7 +34,7 @@ namespace AOI
 
             // 更新key为50的坐标
 
-            entity = zone.Update(50, 3, 3, new Vector2(3, 3));
+            var entity = zone.Update(50, 3, 3, new Vector2(3, 3));
 
             Console.WriteLine("---------------离开玩家范围的玩家列表--------------");
 

@@ -21,16 +21,17 @@ namespace AOI
         /// <param name="x">X</param>
         /// <param name="y">Y</param>
         /// <param name="area"></param>
+        /// <param name="enter"></param>
         /// <returns></returns>
-        public AoiEntity Enter(long key, float x, float y, Vector2 area)
+        public AoiEntity Enter(long key, float x, float y, Vector2 area, out IEnumerable<long> enter)
         {
             var entity = Enter(key, x, y);
 
-            Update(key, area);
+            Update(key, area, out enter);
 
             return entity;
         }
-        
+
         /// <summary>
         /// Add a new AoiZone
         /// </summary>
@@ -48,6 +49,39 @@ namespace AOI
             entity.Y = _yLinks.Add(y, entity);
 
             _entityList.Add(key, entity);
+            return entity;
+        }
+
+        /// <summary>
+        /// Update the AoiEntity
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="area"></param>
+        /// <param name="enter"></param>
+        /// <returns></returns>
+        public AoiEntity Update(long key, Vector2 area, out IEnumerable<long> enter)
+        {
+            var entity = Update(key, area);
+
+            enter = entity?.ViewEntity.Except(entity.ViewEntityBak);
+
+            return entity;
+        }
+
+        /// <summary>
+        /// Update the AoiEntity
+        /// </summary>
+        /// <param name="key">key</param>
+        /// <param name="x">x</param>
+        /// <param name="y">y</param>
+        /// <param name="area">view</param>
+        /// <param name="enter"></param>
+        /// <returns></returns>
+        public AoiEntity Update(long key, float x, float y, Vector2 area, out IEnumerable<long> enter)
+        {
+            var entity = Update(key, x, y, area);
+
+            enter = entity?.ViewEntity.Except(entity.ViewEntityBak);
 
             return entity;
         }
@@ -61,7 +95,7 @@ namespace AOI
         public AoiEntity Update(long key, Vector2 area)
         {
             if (!_entityList.TryGetValue(key, out var entity)) return null;
-            
+
             Find(ref entity, ref area);
 
             return entity;
@@ -160,15 +194,6 @@ namespace AOI
 
             #endregion
         }
-
-        // /// <summary>
-        // /// Area to find
-        // /// </summary>
-        // /// <param name="area"></param>
-        // public IEnumerable<long> Find(Vector2 area)
-        // {
-        //     
-        // }
 
         /// <summary>
         /// SwapViewEntity

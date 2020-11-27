@@ -3,14 +3,14 @@ using System.Linq;
 
 namespace AOI
 {
-    public class AoiEntity
+    public sealed class AoiEntity
     {
         public long Key;
         public AoiLinkedListNode X;
         public AoiLinkedListNode Y;
         public HashSet<long> ViewEntity = new HashSet<long>();
         public HashSet<long> ViewEntityBak = new HashSet<long>();
-        public IEnumerable<long> Enter => ViewEntity.Except(ViewEntityBak);
+        public IEnumerable<long> Move => ViewEntity.Union(ViewEntityBak);
         public IEnumerable<long> Leave => ViewEntityBak.Except(ViewEntity);
         public AoiEntity Init(long key)
         {
