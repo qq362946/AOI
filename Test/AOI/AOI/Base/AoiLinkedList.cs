@@ -123,10 +123,9 @@ namespace AOI
             return false;
         }
 
-        public bool Remove(float target, out AoiEntity entity)
+        public bool Remove(float target)
         {
             var cur = _header;
-            entity = null;
             var seen = false;
 
             for (var l = _level; l >= 1; --l)
@@ -136,7 +135,6 @@ namespace AOI
                 if (cur.Right != null && Math.Abs(cur.Right.Value - target) < Limit)
                 {
                     var temp = cur.Right;
-                    entity = temp.Entity;
                     cur.Right = cur.Right.Right;
                     temp.Recycle();
                     seen = true;

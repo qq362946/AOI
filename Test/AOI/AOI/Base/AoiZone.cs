@@ -196,6 +196,30 @@ namespace AOI
         }
 
         /// <summary>
+        /// Exit the AoiZone
+        /// </summary>
+        /// <param name="key"></param>
+        public void Exit(long key)
+        {
+            if (!_entityList.TryGetValue(key, out var entity)) return;
+
+            Exit(key,  entity);
+        }
+
+        /// <summary>
+        /// Exit the AoiZone
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="node"></param>
+        public void Exit(long key, AoiEntity node)
+        {
+            _xLinks.Remove(node.X.Value);
+            _yLinks.Remove(node.Y.Value);
+
+            _entityList.Remove(key);
+        }
+
+        /// <summary>
         /// SwapViewEntity
         /// </summary>
         /// <param name="viewEntity"></param>

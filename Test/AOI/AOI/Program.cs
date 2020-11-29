@@ -43,6 +43,10 @@ namespace AOI
                 var findEntity = zone[aoiKey];
                 Console.WriteLine($"X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
             }
+            
+            Console.WriteLine("---------------key为50的玩家离开当前AoiZone--------------");
+
+            zone.Exit(50);
         }
     }
 }
