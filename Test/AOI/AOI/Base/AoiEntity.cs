@@ -12,20 +12,24 @@ namespace AOI
         public HashSet<long> ViewEntityBak = new HashSet<long>();
         public IEnumerable<long> Move => ViewEntity.Union(ViewEntityBak);
         public IEnumerable<long> Leave => ViewEntityBak.Except(ViewEntity);
+        private bool _isRecycle;
         public AoiEntity Init(long key)
         {
             Key = key;
-
+            _isRecycle = false;
             return this;
         }
 
         public void Recycle()
         {
+            if (_isRecycle) return;
+            
             X = null;
             Y = null;
             Key = 0;
             ViewEntity.Clear();
             ViewEntityBak.Clear();
+            _isRecycle = true;
         }
     }
 }
