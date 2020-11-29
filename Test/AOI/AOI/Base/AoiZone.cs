@@ -213,8 +213,10 @@ namespace AOI
         /// <param name="node"></param>
         public void Exit(long key, AoiEntity node)
         {
-            _xLinks.Remove(node.X.Value);
-            _yLinks.Remove(node.Y.Value);
+            float x = node.X.Value, y = node.Y.Value;
+
+            _xLinks.Remove(x);
+            _yLinks.Remove(y);
 
             _entityList.Remove(key);
         }
