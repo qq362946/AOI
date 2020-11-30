@@ -6,8 +6,8 @@ namespace AOI
     public sealed class AoiEntity
     {
         public long Key;
-        public AoiLinkedListNode X;
-        public AoiLinkedListNode Y;
+        public AoiNode X;
+        public AoiNode Y;
         public HashSet<long> ViewEntity = new HashSet<long>();
         public HashSet<long> ViewEntityBak = new HashSet<long>();
         public IEnumerable<long> Move => ViewEntity.Union(ViewEntityBak);

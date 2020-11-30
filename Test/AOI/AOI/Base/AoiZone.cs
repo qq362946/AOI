@@ -150,7 +150,8 @@ namespace AOI
                     {
                         break;
                     }
-                    else if (Math.Abs(Math.Abs(cur.Entity.Y.Value) - Math.Abs(node.Y.Value)) <= area.Y)
+
+                    if (Math.Abs(Math.Abs(cur.Entity.Y.Value) - Math.Abs(node.Y.Value)) <= area.Y)
                     {
                         if (Distance(
                             new Vector2(node.X.Value, node.Y.Value),
@@ -178,7 +179,8 @@ namespace AOI
                     {
                         break;
                     }
-                    else if (Math.Abs(Math.Abs(cur.Entity.X.Value) - Math.Abs(node.X.Value)) <= area.X)
+                    
+                    if (Math.Abs(Math.Abs(cur.Entity.X.Value) - Math.Abs(node.X.Value)) <= area.X)
                     {
                         if (Distance(
                             new Vector2(node.X.Value, node.Y.Value),

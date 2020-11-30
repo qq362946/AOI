@@ -3,21 +3,23 @@ using System.Collections.Generic;
 
 namespace AOI
 {
-    public sealed class AoiLinkedListNode
+    public sealed class AoiNode
     {
         public float Value;
+        public int Layer;
         public AoiEntity Entity;
-
-        public AoiLinkedListNode Left;
-        public AoiLinkedListNode Right;
-        public AoiLinkedListNode Top;
-        public AoiLinkedListNode Down;
-
-        public AoiLinkedListNode Init(
-            float v, AoiEntity p,
-            AoiLinkedListNode l, AoiLinkedListNode r,
-            AoiLinkedListNode t, AoiLinkedListNode d)
+    
+        public AoiNode Left;
+        public AoiNode Right;
+        public AoiNode Top;
+        public AoiNode Down;
+    
+        public AoiNode Init(
+            int layer,float v, AoiEntity p,
+            AoiNode l, AoiNode r,
+            AoiNode t, AoiNode d)
         {
+            Layer = layer;
             Left = l;
             Right = r;
             Top = t;
@@ -27,7 +29,7 @@ namespace AOI
             
             return this;
         }
-
+    
         public void Recycle()
         {
             if (Entity != null)
@@ -35,12 +37,12 @@ namespace AOI
                 Entity.Recycle();
                 Entity = null;
             }
-
+    
             Left = null;
             Right = null;
             Top = null;
             Down = null;
-
+    
             AoiPool.Instance.Recycle(this);
         }
     }
@@ -48,25 +50,24 @@ namespace AOI
     public sealed class AoiLinkedList
     {
         private int _level;
-        private AoiLinkedListNode _header;
+        private AoiNode _header;
         private readonly Random _random = new Random();
         private const float Limit = .001f;
+        public int Count { get; private set; }
 
-        public AoiLinkedListNode Add(float target, AoiEntity entity)
+        public AoiNode Add(float target, AoiEntity entity)
         {
             var rLevel = 1;
-            var addNewHeader = false;
             while (rLevel <= _level && _random.Next(2) == 0) ++rLevel;
 
             if (rLevel > _level)
             {
                 _level = rLevel;
-                addNewHeader = true;
-                _header = AoiPool.Instance.Fetch<AoiLinkedListNode>().Init(target, entity,
+                _header = AoiPool.Instance.Fetch<AoiNode>().Init(_level, target, entity,
                     null, null, null, _header);
             }
 
-            AoiLinkedListNode cur = _header, last = null;
+            AoiNode cur = _header, last = null;
 
             for (var l = _level; l >= 1; --l)
             {
@@ -74,22 +75,20 @@ namespace AOI
 
                 if (l <= rLevel)
                 {
-                    var temp = l == rLevel && addNewHeader
-                        ? _header
-                        : cur.Right = AoiPool.Instance.Fetch<AoiLinkedListNode>().Init(target, entity,
-                            cur, cur.Right, null, null);
+                    cur.Right = AoiPool.Instance.Fetch<AoiNode>().Init(l, target, entity,
+                        cur, cur.Right, null, null);
 
                     if (last != null)
                     {
-                        last.Down = temp;
-                        temp.Top = last;
+                        last.Down = cur.Right;
+                        cur.Right.Top = last;
                     }
 
-                    last = temp;
+                    last = cur.Right;
 
                     if (l == 1)
                     {
-                        cur = temp;
+                        cur = cur.Right;
                         break;
                     }
                 }
@@ -97,10 +96,11 @@ namespace AOI
                 cur = cur.Down;
             }
 
+            Count++;
             return cur;
         }
 
-        public bool TryGetValue(float target, out AoiLinkedListNode node)
+        public bool TryGetValue(float target, out AoiNode node)
         {
             node = null;
             
@@ -143,10 +143,11 @@ namespace AOI
                 cur = cur.Down;
             }
 
+            Count--;
             return seen;
         }
 
-        public void Move(ref AoiLinkedListNode node, ref float target)
+        public void Move(ref AoiNode node, ref float target)
         {
             var cur = node;
 
