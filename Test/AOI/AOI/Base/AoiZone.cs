@@ -81,7 +81,7 @@ namespace AOI
         {
             var entity = Update(key, x, y, area);
 
-            enter = entity?.ViewEntity.Except(entity.ViewEntityBak);
+            enter = entity?.ViewEntity;
 
             return entity;
         }
