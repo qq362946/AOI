@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 
 namespace AOI
@@ -15,7 +14,7 @@ namespace AOI
         public AoiEntity this[long key] => !_entityList.TryGetValue(key, out var entity) ? null : entity;
 
         /// <summary>
-        /// Add a new AoiZone
+        /// Add a new AoiEntity
         /// </summary>
         /// <param name="key">key</param>
         /// <param name="x">X</param>
@@ -23,17 +22,31 @@ namespace AOI
         /// <param name="area"></param>
         /// <param name="enter"></param>
         /// <returns></returns>
-        public AoiEntity Enter(long key, float x, float y, Vector2 area, out IEnumerable<long> enter)
+        public AoiEntity Enter(long key, float x, float y, Vector2 area, out HashSet<long> enter)
         {
             var entity = Enter(key, x, y);
-
             Update(key, area, out enter);
-
+            return entity;
+        }
+        
+        /// <summary>
+        /// Add a new AoiEntity
+        /// </summary>
+        /// <param name="key">key</param>
+        /// <param name="x">X</param>
+        /// <param name="y">Y</param>
+        /// <param name="area"></param>
+        /// <param name="enter"></param>
+        /// <returns></returns>
+        public AoiEntity EnterIncludingMyself(long key, float x, float y, Vector2 area, out HashSet<long> enter)
+        {
+            var entity = Enter(key, x, y);
+            Update(key, area, out enter);
             return entity;
         }
 
         /// <summary>
-        /// Add a new AoiZone
+        /// Add a new AoiEntity
         /// </summary>
         /// <param name="key">key</param>
         /// <param name="x">X</param>
@@ -59,12 +72,24 @@ namespace AOI
         /// <param name="area"></param>
         /// <param name="enter"></param>
         /// <returns></returns>
-        public AoiEntity Update(long key, Vector2 area, out IEnumerable<long> enter)
+        public AoiEntity Update(long key, Vector2 area, out HashSet<long> enter)
         {
             var entity = Update(key, area);
-
             enter = entity?.ViewEntity;
+            return entity;
+        }
 
+        /// <summary>
+        /// Update the AoiEntity
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="area"></param>
+        /// <param name="enter"></param>
+        /// <returns></returns>
+        public AoiEntity UpdateIncludingMyself(long key, Vector2 area, out HashSet<long> enter)
+        {
+            var entity = Update(key, area, out enter);
+            enter?.Add(key);
             return entity;
         }
 
@@ -77,12 +102,26 @@ namespace AOI
         /// <param name="area">view</param>
         /// <param name="enter"></param>
         /// <returns></returns>
-        public AoiEntity Update(long key, float x, float y, Vector2 area, out IEnumerable<long> enter)
+        public AoiEntity Update(long key, float x, float y, Vector2 area, out HashSet<long> enter)
         {
             var entity = Update(key, x, y, area);
-
             enter = entity?.ViewEntity;
+            return entity;
+        }
 
+        /// <summary>
+        /// Update the AoiEntity
+        /// </summary>
+        /// <param name="key">key</param>
+        /// <param name="x">x</param>
+        /// <param name="y">y</param>
+        /// <param name="area">view</param>
+        /// <param name="enter"></param>
+        /// <returns></returns>
+        public AoiEntity UpdateIncludingMyself(long key, float x, float y, Vector2 area, out HashSet<long> enter)
+        {
+            var entity = Update(key, x, y, area, out enter);
+            enter?.Add(key);
             return entity;
         }
 
