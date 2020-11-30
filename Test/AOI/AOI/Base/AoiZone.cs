@@ -11,6 +11,8 @@ namespace AOI
         private readonly AoiLinkedList _xLinks = new AoiLinkedList();
         private readonly AoiLinkedList _yLinks = new AoiLinkedList();
 
+        public static AoiZone NewAoiZone => new AoiZone();
+
         public AoiEntity this[long key] => !_entityList.TryGetValue(key, out var entity) ? null : entity;
 
         /// <summary>
