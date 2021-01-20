@@ -43,7 +43,7 @@ AOI库介绍
             }
 相关资料
 ==========
-<p>[AOI算法实现和原理（一）](https://zhuanlan.zhihu.com/p/56114206?from_voters_page=true)</p>
-<p>[AOI算法实现和原理（二）](https://zhuanlan.zhihu.com/p/345741408)</p>
+[AOI算法实现和原理（一）](https://zhuanlan.zhihu.com/p/56114206?from_voters_page=true)
+[AOI算法实现和原理（二）](https://zhuanlan.zhihu.com/p/345741408)
 
   
