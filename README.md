@@ -10,7 +10,7 @@ AOI库介绍
             float floatBase = 1.41421354f;   
             //  创建一个区域
             var zone = new AoiZone();
-            //  创建一个查找访问
+            //  创建一个查找范围
             var area = new Vector2(2 * floatBase, 2 * floatBase);
             //  加入机器人单位
             int counter = 0;
