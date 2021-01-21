@@ -13,6 +13,7 @@ namespace AOI
 
         public static AoiZone NewAoiZone => new AoiZone();
 
+        public int Count => _entityList.Count;
         public AoiEntity this[long key] => !_entityList.TryGetValue(key, out var entity) ? null : entity;
 
         /// <summary>

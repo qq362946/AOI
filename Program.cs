@@ -33,11 +33,15 @@ namespace AOI
                 var mine = zone.Enter(123456789, 15, 6, area, out var mineEnters);
                 zone.Update(123456789, area, out var updateList);
                 Console.WriteLine(updateList.Count() + " 数量");
+                Console.WriteLine($"节点总数量:{zone.Count}");
                 foreach (var aoiKey in updateList)
                 {
                     var findEntity = zone[aoiKey];
                     Console.WriteLine($"周围的单位 - Key:{findEntity.Key} X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
                 }
+                // 退出节点
+                zone.Exit(123456789);
+                Console.WriteLine($"退出后节点总数量:{zone.Count}");
             }
             catch (Exception e)
             {
