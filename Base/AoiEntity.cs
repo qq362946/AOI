@@ -30,6 +30,7 @@ namespace AOI
             ViewEntity.Clear();
             ViewEntityBak.Clear();
             _isRecycle = true;
+            AoiPool.Instance.Recycle(this);
         }
     }
 }

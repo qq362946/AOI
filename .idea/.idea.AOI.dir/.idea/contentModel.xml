@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Administrator\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Administrator\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_.19.00" t="ExcludeRecursive" />
+    <e p="D:\Code\AOI" t="IncludeRecursive">
+      <e p=".gitignore" t="Include" />
+      <e p="AOI.csproj" t="IncludeRecursive" />
+      <e p="Base" t="Include">
+        <e p="AoiEntity.cs" t="Include" />
+        <e p="AoiLinkedList.cs" t="Include" />
+        <e p="AoiNode.cs" t="Include" />
+        <e p="AoiPool.cs" t="Include" />
+        <e p="AoiZone.cs" t="Include" />
+      </e>
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="obj" t="ExcludeRecursive">
+        <e p="Debug" t="Include">
+          <e p="netcoreapp3.1" t="Include">
+            <e p="AOI.AssemblyInfo.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="Old" t="Include">
+        <e p="AoiComponent.cs" t="Include" />
+        <e p="AoiEntity.cs" t="Include" />
+        <e p="AoiNode.cs" t="Include" />
+        <e p="AoiNodeLinkedList.cs" t="Include" />
+        <e p="Test.cs" t="Include" />
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Program.cs" t="Include" />
+      <e p="README.md" t="Include" />
+      <e p="SkipList" t="Include">
+        <e p="SkipList.cs" t="Include" />
+        <e p="SkipListNode.cs" t="Include" />
+        <e p="SkipListPool.cs" t="Include" />
+      </e>
+    </e>
+  </component>
+</project>
