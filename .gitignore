@@ -3,6 +3,7 @@
 # 工程编译后的目录和日志
 /Bin
 /Logs
+/obj
 # Rider生成的一个文件夹
 .idea
 node_modules
