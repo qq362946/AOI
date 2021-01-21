@@ -1,12 +1,15 @@
+# MAC生成的一个文件
+*.DS_Store
+# 工程编译后的目录和日志
+/Bin
+/Logs
+# Rider生成的一个文件夹
+.idea
+node_modules
+/dist
+.env.local
+.env.*.local
+npm-debug.log*
+~$*.xlsx
 
-ET-Component/\.DS_Store
 
-\.DS_Store
-
-Test/AOI/\.idea/
-
-Test/AOI/AOI/bin/
-
-Test/AOI/AOI/obj/Debug/
-
-Test/AOI/AOI/obj/Release/
