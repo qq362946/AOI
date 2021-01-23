@@ -7,40 +7,48 @@ AOI库介绍
 
 使用例子
 ==========
-            float floatBase = 1.41421354f;   
-            //  创建一个区域
             var zone = new AoiZone();
-            //  创建一个查找范围
-            var area = new Vector2(2 * floatBase, 2 * floatBase);
-            //  加入机器人单位
-            int counter = 0;
-            for (var i = 1; i <= 30; i++)
+            var area = new Vector2(3, 3);
+
+            // 添加50个玩家。
+            
+            for (var i = 1; i <= 50; i++) zone.Enter(i, i, i);
+
+            // 刷新key为3的信息。
+            
+            zone.Refresh(3, area, out var enters);
+
+            Console.WriteLine("---------------加入玩家范围的玩家列表--------------");
+
+            foreach (var aoiKey in enters)
             {
-                for (int j = 0; j < 30; j++)
-                {
-                    Console.WriteLine($"已加入机器人 x:{j} y:{i} id:{counter}");
-                    zone.Enter(counter, j, i);
-                    counter++;
-                }
+                var findEntity = zone[aoiKey];
+                Console.WriteLine($"X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
             }
-            try
+
+            // 更新key为50的坐标。
+
+            var entity = zone.Refresh(3, 20, 20, new Vector2(3, 3), out enters);
+
+            Console.WriteLine("---------------离开玩家范围的玩家列表--------------");
+
+            foreach (var aoiKey in entity.Leave)
             {
-                // 加入自己
-                var mine = zone.Enter(123456789, 15, 6, area, out var mineEnters);
-                // 刷新区域
-                zone.Update(123456789, area, out var updateList);
-                Console.WriteLine(updateList.Count() + " 数量");
-                foreach (var aoiKey in updateList)
-                {
-                    var findEntity = zone[aoiKey];
-                    Console.WriteLine($"周围的单位 - Key:{findEntity.Key} X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
-                }
+                var findEntity = zone[aoiKey];
+                Console.WriteLine($"X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
             }
-            catch (Exception e)
+
+            Console.WriteLine("---------------key为3移动后加入玩家范围的玩家列表--------------");
+
+            foreach (var aoiKey in enters)
             {
-                Console.WriteLine(e);
-                throw;
+                var findEntity = zone[aoiKey];
+                Console.WriteLine($"X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
             }
+            
+            // 离开当前AOI
+
+            zone.Exit(50);
 相关资料
 ==========
 [AOI算法实现和原理（一）](https://zhuanlan.zhihu.com/p/56114206?from_voters_page=true)
