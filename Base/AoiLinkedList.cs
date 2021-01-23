@@ -58,7 +58,7 @@ namespace AOI
         public bool TryGetValue(float target, out AoiNode node)
         {
             node = null;
-            
+
             var cur = _header;
 
             while (cur != null)
@@ -66,7 +66,7 @@ namespace AOI
                 while (cur.Right != null && cur.Right.Value < target) cur = cur.Right;
 
                 if (cur.Right != null && Math.Abs(cur.Right.Value - target) < Limit)
-                { 
+                {
                     node = cur.Right;
                     while (node.Down != null) node = node.Down;
                     return true;
@@ -78,6 +78,11 @@ namespace AOI
             return false;
         }
 
+        /// <summary>
+        /// Remove
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
         public bool Remove(float target)
         {
             var cur = _header;
@@ -102,7 +107,12 @@ namespace AOI
             return seen;
         }
 
-        public void Move(ref AoiNode node, ref float target)
+        /// <summary>
+        /// Move
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="target"></param>
+        public void Move(AoiNode node, ref float target)
         {
             var cur = node;
 
@@ -110,51 +120,24 @@ namespace AOI
 
             if (target > cur.Value)
             {
-                if (cur.Right == null || target <= cur.Right.Value)
-                {
-                    while (cur != null)
-                    {
-                        cur.Value = target;
-                        cur = cur.Top;
-                    }
-
-                    return;
-                }
-
                 while (cur != null)
                 {
-                    var moveCur = cur;
-
-                    moveCur.Value = target;
-
-                    if (cur.Left != null || cur.Right != null)
+                    if (cur.Right != null && target > cur.Right.Value)
                     {
-                        if (cur.Right != null) cur = cur.Right;
-
-                        if (moveCur.Right != null)
-                        {
-                            moveCur.Right.Left = moveCur.Left;
-
-                            if (moveCur.Left != null)
-                            {
-                                moveCur.Left.Right = moveCur.Right;
-                                moveCur.Left = null;
-                            }
-
-                            moveCur.Right = null;
-                        }
-
-                        while (cur.Right != null && cur.Right.Value < target) cur = cur.Right;
-
-                        moveCur.Right = cur.Right;
-                        moveCur.Left = cur;
-                        
-                        if (cur.Right != null) cur.Right.Left = moveCur;
-                        
-                        cur.Right = moveCur;
+                        var findNode = cur;
+                        // 寻找到需要移动到的目标节点。
+                        while (findNode.Right != null && findNode.Right.Value < target) findNode = findNode.Right;
+                        // 熔断当前节点。
+                        CircuitBreaker(cur);
+                        // 移动到目标节点位置
+                        cur.Left = findNode;
+                        cur.Right = findNode.Right;
+                        if (findNode.Right != null) findNode.Right.Left = cur;
+                        findNode.Right = cur;
                     }
 
-                    cur = moveCur.Top;
+                    cur.Value = target;
+                    cur = cur.Top;
                 }
 
                 return;
@@ -164,54 +147,40 @@ namespace AOI
 
             #region Right
 
-            if (cur.Left == null || target >= cur.Left.Value)
-            {
-                while (cur != null)
-                {
-                    cur.Value = target;
-                    cur = cur.Top;
-                }
-
-                return;
-            }
-
             while (cur != null)
             {
-                var moveCur = cur;
-
-                moveCur.Value = target;
-
-                if (cur.Left != null || cur.Right != null)
+                if (cur.Left != null && target < cur.Left.Value)
                 {
-                    if (cur.Left != null) cur = cur.Left;
-
-                    if (moveCur.Left != null)
-                    {
-                        moveCur.Left.Right = moveCur.Right;
-
-                        if (moveCur.Right != null)
-                        {
-                            moveCur.Right.Left = moveCur.Left;
-                            moveCur.Right = null;
-                        }
-
-                        moveCur.Left = null;
-                    }
-
-                    while (cur.Left != null && cur.Left.Value > target) cur = cur.Left;
-
-                    moveCur.Left = cur.Left;
-                    moveCur.Right = cur;
-                    
-                    if (cur.Left != null) cur.Left.Right = moveCur;
-                    
-                    cur.Left = moveCur;
+                    // 寻找到需要移动到的目标节点。
+                    var findNode = cur;
+                    while (findNode.Left != null && findNode.Left.Value > target) findNode = findNode.Left;
+                    // 熔断当前节点。
+                    CircuitBreaker(cur);
+                    // 移动到目标节点位置。
+                    cur.Right = findNode;
+                    cur.Left = findNode.Left;
+                    if (findNode.Left != null) findNode.Left.Right = cur;
+                    findNode.Left = cur;
                 }
 
-                cur = moveCur.Top;
+                cur.Value = target;
+                cur = cur.Top;
             }
 
             #endregion
+        }
+
+        /// <summary>
+        /// Circuit Breaker
+        /// </summary>
+        /// <param name="cur"></param>
+        private void CircuitBreaker(AoiNode cur)
+        {
+            if (cur.Left != null) cur.Left.Right = cur.Right;
+            if (cur.Right == null) return;
+            cur.Right.Left = cur.Left;
+            cur.Left = null;
+            cur.Right = null;
         }
     }
 }

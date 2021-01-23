@@ -29,12 +29,7 @@
     
         public void Recycle()
         {
-            if (Entity != null)
-            {
-                Entity.Recycle();
-                Entity = null;
-            }
-    
+            Entity = null;
             Left = null;
             Right = null;
             Top = null;

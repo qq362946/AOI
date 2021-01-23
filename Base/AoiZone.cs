@@ -28,7 +28,7 @@ namespace AOI
         public AoiEntity Enter(long key, float x, float y, Vector2 area, out HashSet<long> enter)
         {
             var entity = Enter(key, x, y);
-            Update(key, area, out enter);
+            Refresh(key, area, out enter);
             return entity;
         }
         
@@ -44,7 +44,7 @@ namespace AOI
         public AoiEntity EnterIncludingMyself(long key, float x, float y, Vector2 area, out HashSet<long> enter)
         {
             var entity = Enter(key, x, y);
-            Update(key, area, out enter);
+            RefreshIncludingMyself(key, area, out enter);
             return entity;
         }
 
@@ -69,35 +69,21 @@ namespace AOI
         }
 
         /// <summary>
-        /// Update the AoiEntity
+        /// Refresh the AoiEntity
         /// </summary>
         /// <param name="key"></param>
         /// <param name="area"></param>
         /// <param name="enter"></param>
         /// <returns></returns>
-        public AoiEntity Update(long key, Vector2 area, out HashSet<long> enter)
+        public AoiEntity Refresh(long key, Vector2 area, out HashSet<long> enter)
         {
-            var entity = Update(key, area);
+            var entity = Refresh(key, area);
             enter = entity?.ViewEntity;
             return entity;
         }
 
         /// <summary>
-        /// Update the AoiEntity
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="area"></param>
-        /// <param name="enter"></param>
-        /// <returns></returns>
-        public AoiEntity UpdateIncludingMyself(long key, Vector2 area, out HashSet<long> enter)
-        {
-            var entity = Update(key, area, out enter);
-            enter?.Add(key);
-            return entity;
-        }
-
-        /// <summary>
-        /// Update the AoiEntity
+        /// Refresh the AoiEntity
         /// </summary>
         /// <param name="key">key</param>
         /// <param name="x">x</param>
@@ -105,15 +91,29 @@ namespace AOI
         /// <param name="area">view</param>
         /// <param name="enter"></param>
         /// <returns></returns>
-        public AoiEntity Update(long key, float x, float y, Vector2 area, out HashSet<long> enter)
+        public AoiEntity Refresh(long key, float x, float y, Vector2 area, out HashSet<long> enter)
         {
-            var entity = Update(key, x, y, area);
+            var entity = Refresh(key, x, y, area);
             enter = entity?.ViewEntity;
             return entity;
         }
+        
+        /// <summary>
+        /// Refresh the AoiEntity
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="area"></param>
+        /// <param name="enter"></param>
+        /// <returns></returns>
+        public AoiEntity RefreshIncludingMyself(long key, Vector2 area, out HashSet<long> enter)
+        {
+            var entity = Refresh(key, area, out enter);
+            enter?.Add(key);
+            return entity;
+        }
 
         /// <summary>
-        /// Update the AoiEntity
+        /// Refresh the AoiEntity
         /// </summary>
         /// <param name="key">key</param>
         /// <param name="x">x</param>
@@ -121,52 +121,55 @@ namespace AOI
         /// <param name="area">view</param>
         /// <param name="enter"></param>
         /// <returns></returns>
-        public AoiEntity UpdateIncludingMyself(long key, float x, float y, Vector2 area, out HashSet<long> enter)
+        public AoiEntity RefreshIncludingMyself(long key, float x, float y, Vector2 area, out HashSet<long> enter)
         {
-            var entity = Update(key, x, y, area, out enter);
+            var entity = Refresh(key, x, y, area, out enter);
             enter?.Add(key);
             return entity;
         }
 
         /// <summary>
-        /// Update the AoiEntity
+        /// Refresh the AoiEntity
         /// </summary>
         /// <param name="key"></param>
         /// <param name="area"></param>
         /// <returns></returns>
-        public AoiEntity Update(long key, Vector2 area)
+        public AoiEntity Refresh(long key, Vector2 area)
         {
             if (!_entityList.TryGetValue(key, out var entity)) return null;
 
-            Find(ref entity, ref area);
+            Find(entity, ref area);
 
             return entity;
         }
 
         /// <summary>
-        /// Update the AoiEntity
+        /// Refresh the AoiEntity
         /// </summary>
         /// <param name="key">key</param>
         /// <param name="x">x</param>
         /// <param name="y">y</param>
         /// <param name="area">view</param>
         /// <returns></returns>
-        public AoiEntity Update(long key, float x, float y, Vector2 area)
+        public AoiEntity Refresh(long key, float x, float y, Vector2 area)
         {
             if (!_entityList.TryGetValue(key, out var entity)) return null;
+
+            var isFind = false;
 
             if (Math.Abs(entity.X.Value - x) > 0)
             {
-                _xLinks.Move(ref entity.X, ref x);
+                isFind = true;
+                _xLinks.Move(entity.X, ref x);
             }
 
             if (Math.Abs(entity.Y.Value - y) > 0)
             {
-                _yLinks.Move(ref entity.Y, ref y);
+                isFind = true;
+                _yLinks.Move(entity.Y, ref y);
             }
 
-            Find(ref entity, ref area);
-
+            if (isFind) Find(entity, ref area);
             return entity;
         }
 
@@ -176,7 +179,7 @@ namespace AOI
         /// <param name="node"></param>
         /// <param name="area"></param>
         /// <returns>news entity</returns>
-        private void Find(ref AoiEntity node, ref Vector2 area)
+        private void Find(AoiEntity node, ref Vector2 area)
         {
             SwapViewEntity(ref node.ViewEntity, ref node.ViewEntityBak);
 
@@ -247,7 +250,7 @@ namespace AOI
         {
             if (!_entityList.TryGetValue(key, out var entity)) return;
 
-            Exit(key,  entity);
+            Exit(entity);
         }
 
         /// <summary>
@@ -255,14 +258,12 @@ namespace AOI
         /// </summary>
         /// <param name="key"></param>
         /// <param name="node"></param>
-        public void Exit(long key, AoiEntity node)
+        public void Exit(AoiEntity node)
         {
-            float x = node.X.Value, y = node.Y.Value;
-
-            _xLinks.Remove(x);
-            _yLinks.Remove(y);
-
-            _entityList.Remove(key);
+            _xLinks.Remove(node.X.Value);
+            _yLinks.Remove(node.Y.Value);
+            _entityList.Remove(node.Key);
+            node.Recycle();
         }
 
         /// <summary>

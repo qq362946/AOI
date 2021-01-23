@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Numerics;
 
 namespace AOI
@@ -8,83 +7,48 @@ namespace AOI
     {
         static void Main(string[] args)
         {
-            float floatBase = 1.41421354f;
-            
             var zone = new AoiZone();
-            var area = new Vector2(2 * floatBase, 2 * floatBase);
+            var area = new Vector2(3, 3);
 
-            //  加入机器人单位
-            int counter = 0;
-            for (var i = 1; i <= 30; i++)
+            // 添加50个玩家。
+            
+            for (var i = 1; i <= 50; i++) zone.Enter(i, i, i);
+
+            // 刷新key为3的信息。
+            
+            zone.Refresh(3, area, out var enters);
+
+            Console.WriteLine("---------------加入玩家范围的玩家列表--------------");
+
+            foreach (var aoiKey in enters)
             {
-                for (int j = 0; j < 30; j++)
-                {
-                    Console.WriteLine($"已加入机器人 x:{j} y:{i} id:{counter}");
-                    zone.Enter(counter, j, i);
-                    counter++;
-                }
+                var findEntity = zone[aoiKey];
+                Console.WriteLine($"X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
             }
 
-            Console.WriteLine("---------------------------");
+            // 更新key为50的坐标。
 
-            try
+            var entity = zone.Refresh(3, 20, 20, new Vector2(3, 3), out enters);
+
+            Console.WriteLine("---------------离开玩家范围的玩家列表--------------");
+
+            foreach (var aoiKey in entity.Leave)
             {
-                // 加入自己
-                var mine = zone.Enter(123456789, 15, 6, area, out var mineEnters);
-                zone.Update(123456789, area, out var updateList);
-                Console.WriteLine(updateList.Count() + " 数量");
-                Console.WriteLine($"节点总数量:{zone.Count}");
-                foreach (var aoiKey in updateList)
-                {
-                    var findEntity = zone[aoiKey];
-                    Console.WriteLine($"周围的单位 - Key:{findEntity.Key} X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
-                }
-                // 退出节点
-                zone.Exit(123456789);
-                Console.WriteLine($"退出后节点总数量:{zone.Count}");
+                var findEntity = zone[aoiKey];
+                Console.WriteLine($"X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
             }
-            catch (Exception e)
+
+            Console.WriteLine("---------------key为3移动后加入玩家范围的玩家列表--------------");
+
+            foreach (var aoiKey in enters)
             {
-                Console.WriteLine(e);
-                throw;
+                var findEntity = zone[aoiKey];
+                Console.WriteLine($"X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
             }
+            
+            // 离开当前AOI
+
+            zone.Exit(50);
         }
-        
-        // static void Main(string[] args)
-        // {
-        //     var zone = new AoiZone();
-        //     var area = new Vector2(3, 3);
-        //
-        //     for (var i = 1; i <= 5; i++)
-        //     {
-        //         var ss = zone.Enter(i, i, i);
-        //     }
-        //
-        //     zone.Update(3, area, out var enters);
-        //
-        //     Console.WriteLine("---------------加入玩家范围的玩家列表--------------");
-        //
-        //     foreach (var aoiKey in enters)
-        //     {
-        //         var findEntity = zone[aoiKey];
-        //         Console.WriteLine($"X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
-        //     }
-        //
-        //     // 更新key为50的坐标
-        //
-        //     var entity = zone.Update(50, 3, 3, new Vector2(3, 3));
-        //
-        //     Console.WriteLine("---------------离开玩家范围的玩家列表--------------");
-        //
-        //     foreach (var aoiKey in entity.Leave)
-        //     {
-        //         var findEntity = zone[aoiKey];
-        //         Console.WriteLine($"X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
-        //     }
-        //     
-        //     Console.WriteLine("---------------key为50的玩家离开当前AoiZone--------------");
-        //
-        //     zone.Exit(50);
-        // }
     }
 }
