@@ -1,27 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace AOI
 {
     public sealed class AoiZone
     {
+        private readonly AoiLinkedList _xLinks;
+        private readonly AoiLinkedList _yLinks;
         private readonly Dictionary<long, AoiEntity> _entityList = new Dictionary<long, AoiEntity>();
 
-        private readonly AoiLinkedList _xLinks = new AoiLinkedList();
-        private readonly AoiLinkedList _yLinks = new AoiLinkedList();
+        public AoiZone()
+        {
+            _xLinks = new AoiLinkedList();
+            _yLinks = new AoiLinkedList();
+        }
+        
+        public AoiZone(float xLinksLimit, float yLinksLimit)
+        {
+            _xLinks = new AoiLinkedList(limit:xLinksLimit);
+            _yLinks = new AoiLinkedList(limit:xLinksLimit);
+        }
 
-        public static AoiZone NewAoiZone => new AoiZone();
+        public AoiZone(int maxLayer, float xLinksLimit, float yLinksLimit)
+        {
+            _xLinks = new AoiLinkedList(maxLayer, xLinksLimit);
+            _yLinks = new AoiLinkedList(maxLayer, yLinksLimit);
+        }
 
+        /// <summary>
+        /// Count
+        /// </summary>
         public int Count => _entityList.Count;
+        
         public AoiEntity this[long key] => !_entityList.TryGetValue(key, out var entity) ? null : entity;
 
         /// <summary>
         /// Add a new AoiEntity
         /// </summary>
         /// <param name="key">key</param>
-        /// <param name="x">X</param>
-        /// <param name="y">Y</param>
+        /// <param name="x">X MinValue = -3.402823E+38f</param>
+        /// <param name="y">Y MinValue = -3.402823E+38f</param>
         /// <param name="area"></param>
         /// <param name="enter"></param>
         /// <returns></returns>
@@ -31,13 +51,13 @@ namespace AOI
             Refresh(key, area, out enter);
             return entity;
         }
-        
+
         /// <summary>
         /// Add a new AoiEntity
         /// </summary>
         /// <param name="key">key</param>
-        /// <param name="x">X</param>
-        /// <param name="y">Y</param>
+        /// <param name="x">X MinValue = -3.402823E+38f</param>
+        /// <param name="y">Y MinValue = -3.402823E+38f</param>
         /// <param name="area"></param>
         /// <param name="enter"></param>
         /// <returns></returns>
@@ -52,8 +72,8 @@ namespace AOI
         /// Add a new AoiEntity
         /// </summary>
         /// <param name="key">key</param>
-        /// <param name="x">X</param>
-        /// <param name="y">Y</param>
+        /// <param name="x">X MinValue = -3.402823E+38f</param>
+        /// <param name="y">Y MinValue = -3.402823E+38f</param>
         /// <returns></returns>
         public AoiEntity Enter(long key, float x, float y)
         {
@@ -86,8 +106,8 @@ namespace AOI
         /// Refresh the AoiEntity
         /// </summary>
         /// <param name="key">key</param>
-        /// <param name="x">x</param>
-        /// <param name="y">y</param>
+        /// <param name="x">X MinValue = -3.402823E+38f</param>
+        /// <param name="y">Y MinValue = -3.402823E+38f</param>
         /// <param name="area">view</param>
         /// <param name="enter"></param>
         /// <returns></returns>
@@ -116,8 +136,8 @@ namespace AOI
         /// Refresh the AoiEntity
         /// </summary>
         /// <param name="key">key</param>
-        /// <param name="x">x</param>
-        /// <param name="y">y</param>
+        /// <param name="x">X MinValue = -3.402823E+38f</param>
+        /// <param name="y">Y MinValue = -3.402823E+38f</param>
         /// <param name="area">view</param>
         /// <param name="enter"></param>
         /// <returns></returns>
@@ -147,8 +167,8 @@ namespace AOI
         /// Refresh the AoiEntity
         /// </summary>
         /// <param name="key">key</param>
-        /// <param name="x">x</param>
-        /// <param name="y">y</param>
+        /// <param name="x">X MinValue = -3.402823E+38f</param>
+        /// <param name="y">Y MinValue = -3.402823E+38f</param>
         /// <param name="area">view</param>
         /// <returns></returns>
         public AoiEntity Refresh(long key, float x, float y, Vector2 area)
@@ -249,7 +269,7 @@ namespace AOI
         public void Exit(long key)
         {
             if (!_entityList.TryGetValue(key, out var entity)) return;
-
+        
             Exit(entity);
         }
 
