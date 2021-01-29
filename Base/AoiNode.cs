@@ -4,9 +4,7 @@
     {
         public float Value;
         public int Layer;
-        public int Count;
         public AoiEntity Entity;
-    
         public AoiNode Left;
         public AoiNode Right;
         public AoiNode Top;
@@ -31,7 +29,6 @@
         {
             Value = 0;
             Layer = 0;
-            Count = 0;
             Entity = null;
             Left = null;
             Right = null;

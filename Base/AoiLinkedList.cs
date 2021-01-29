@@ -9,12 +9,11 @@ namespace AOI
         private readonly float _limit;
         private readonly int _maxLayer;
 
-        public AoiLinkedList(int maxLayer = 5, float limit = 0)
+        public AoiLinkedList(int maxLayer = 8, float limit = 0)
         {
             _limit = limit;
             _maxLayer = maxLayer;
-            Add(float.MinValue, null);
-            Count -= maxLayer;
+            Add(float.MinValue);
         }
 
         public int Count { get; private set; }
@@ -25,19 +24,20 @@ namespace AOI
         /// <param name="target">target MinValue = -3.402823E+38f</param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public AoiNode Add(float target, AoiEntity entity)
+        public AoiNode Add(float target, AoiEntity entity = null)
         {
-            // toss a coin and Create a new _header
             var rLayer = 1;
+
             if (_header == null)
             {
                 rLayer = _maxLayer;
+
                 var tempHeader = _header = AoiPool.Instance.Fetch<AoiNode>().Init(rLayer, target, entity);
 
                 for (var layer = _maxLayer - 1; layer >= 1; --layer)
                 {
                     _header = _header.Down =
-                        AoiPool.Instance.Fetch<AoiNode>().Init(layer, target, entity, top: _header);
+                        AoiPool.Instance.Fetch<AoiNode>().Init(layer, target, top: _header);
                 }
 
                 _header = tempHeader;
@@ -46,69 +46,28 @@ namespace AOI
 
             while (rLayer < _maxLayer && _random.Next(2) == 0) ++rLayer;
 
-            if (rLayer > _maxLayer)
-            {
-                _header = AoiPool.Instance.Fetch<AoiNode>().Init(rLayer, target, entity);
-            }
+            AoiNode cur = _header, insertNode = null, lastLayerNode = null;
 
-            // Define the required variables
-            AoiNode cur = _header, lastLayerNode = null, insertNode = null;
-            // Iterate through all layers to create an AoiNode
             for (var layer = _maxLayer; layer >= 1; --layer)
             {
-                while (cur.Right != null && cur.Right.Value <= target)
-                {
-                    cur = cur.Right;
-                }
+                while (cur.Right != null && cur.Right.Value < target) cur = cur.Right;
 
-                if (layer > rLayer)
+                if (layer <= rLayer)
                 {
-                    cur = cur.Down;
-                }
-                else
-                {
-                    if (Math.Abs(target - cur.Value) > _limit)
+                    insertNode = AoiPool.Instance.Fetch<AoiNode>()
+                        .Init(layer, target, entity: entity, left: cur, right: cur.Right);
+                    if (cur.Right != null) cur.Right.Left = insertNode;
+                    cur.Right = insertNode;
+
+                    if (lastLayerNode != null)
                     {
-                        insertNode = AoiPool.Instance.Fetch<AoiNode>().Init(layer, target, entity, top: lastLayerNode);
-
-                        if (target - cur.Value > 0)
-                        {
-                            insertNode.Left = cur;
-                            insertNode.Right = cur.Right;
-                            if (cur.Right != null)
-                            {
-                                cur.Right.Left = insertNode;
-                            }
-
-                            cur.Right = insertNode;
-                        }
-                        else
-                        {
-                            insertNode.Right = cur;
-                            insertNode.Left = cur.Left;
-                            if (cur.Left != null)
-                            {
-                                cur.Left.Right = insertNode;
-                            }
-
-                            cur.Left = insertNode;
-                        }
-
-                        if (lastLayerNode != null)
-                        {
-                            lastLayerNode.Down = insertNode;
-                        }
-
-                        insertNode.Count = 1;
-                    }
-                    else if (layer == 1)
-                    {
-                        cur.Count++;
+                        lastLayerNode.Down = insertNode;
                     }
 
                     lastLayerNode = insertNode;
-                    cur = cur.Down;
                 }
+
+                cur = cur.Down;
             }
 
             Count++;
@@ -145,33 +104,55 @@ namespace AOI
         /// <summary>
         /// Remove
         /// </summary>
+        /// <param name="key"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public bool Remove(float target)
+        public bool Remove(long key, float target)
         {
-            if (!TryGetValue(target, out var cur))
+            var seen = false;
+            var cur = _header;
+            while (cur != null)
             {
-                return false;
-            }
+                while (cur.Right != null && cur.Right.Value < target) cur = cur.Right;
 
-            if (cur.Count > 1)
-            {
-                cur.Count--;
-            }
-            else
-            {
-                while (cur != null)
+                if (cur.Right != null && cur.Right.Value - target <= _limit && cur.Right.Entity.Key == key)
                 {
-                    var temp = cur;
-                    cur = cur.Top;
-                    CircuitBreaker(temp);
-                    temp.Recycle();
+                    var tmp = cur.Right;
+                    CircuitBreaker(tmp);
+                    tmp.Recycle();
+                    seen = true;
                 }
+
+                cur = cur.Down;
             }
 
-            Count--;
-            return true;
+            return seen;
         }
+
+        // if (!TryGetValue(target, out var cur))
+            // {
+            //     return false;
+            // }
+            //
+            // if (cur.Count > 1)
+            // {
+            //     cur.Count--;
+            // }
+            // else
+            // {
+            //     while (cur != null)
+            //     {
+            //         var temp = cur;
+            //         cur.Top.Down = null;
+            //         cur = cur.Top;
+            //         CircuitBreaker(temp);
+            //         temp.Recycle();
+            //     }
+            // }
+            //
+            // Count--;
+            // return true;
+        // }
 
         /// <summary>
         /// Move

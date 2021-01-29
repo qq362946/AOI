@@ -16,11 +16,11 @@ namespace AOI
             _xLinks = new AoiLinkedList();
             _yLinks = new AoiLinkedList();
         }
-        
+
         public AoiZone(float xLinksLimit, float yLinksLimit)
         {
-            _xLinks = new AoiLinkedList(limit:xLinksLimit);
-            _yLinks = new AoiLinkedList(limit:xLinksLimit);
+            _xLinks = new AoiLinkedList(limit: xLinksLimit);
+            _yLinks = new AoiLinkedList(limit: xLinksLimit);
         }
 
         public AoiZone(int maxLayer, float xLinksLimit, float yLinksLimit)
@@ -33,7 +33,7 @@ namespace AOI
         /// Count
         /// </summary>
         public int Count => _entityList.Count;
-        
+
         public AoiEntity this[long key] => !_entityList.TryGetValue(key, out var entity) ? null : entity;
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace AOI
             entity = AoiPool.Instance.Fetch<AoiEntity>().Init(key);
 
             entity.X = _xLinks.Add(x, entity);
-            entity.Y = _yLinks.Add(y, entity);
+            // entity.Y = _yLinks.Add(y, entity);
 
             _entityList.Add(key, entity);
             return entity;
@@ -117,7 +117,7 @@ namespace AOI
             enter = entity?.ViewEntity;
             return entity;
         }
-        
+
         /// <summary>
         /// Refresh the AoiEntity
         /// </summary>
@@ -244,7 +244,7 @@ namespace AOI
                     {
                         break;
                     }
-                    
+
                     if (Math.Abs(Math.Abs(cur.Entity.X.Value) - Math.Abs(node.X.Value)) <= area.X)
                     {
                         if (Distance(
@@ -269,7 +269,7 @@ namespace AOI
         public void Exit(long key)
         {
             if (!_entityList.TryGetValue(key, out var entity)) return;
-        
+
             Exit(entity);
         }
 
@@ -280,8 +280,8 @@ namespace AOI
         /// <param name="node"></param>
         public void Exit(AoiEntity node)
         {
-            _xLinks.Remove(node.X.Value);
-            _yLinks.Remove(node.Y.Value);
+            _xLinks.Remove(node.Key, node.X.Value);
+            // _yLinks.Remove(node.Key, node.Y.Value);
             _entityList.Remove(node.Key);
             node.Recycle();
         }
