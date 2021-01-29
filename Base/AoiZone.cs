@@ -82,7 +82,7 @@ namespace AOI
             entity = AoiPool.Instance.Fetch<AoiEntity>().Init(key);
 
             entity.X = _xLinks.Add(x, entity);
-            // entity.Y = _yLinks.Add(y, entity);
+            entity.Y = _yLinks.Add(y, entity);
 
             _entityList.Add(key, entity);
             return entity;
@@ -281,7 +281,7 @@ namespace AOI
         public void Exit(AoiEntity node)
         {
             _xLinks.Remove(node.Key, node.X.Value);
-            // _yLinks.Remove(node.Key, node.Y.Value);
+            _yLinks.Remove(node.Key, node.Y.Value);
             _entityList.Remove(node.Key);
             node.Recycle();
         }
