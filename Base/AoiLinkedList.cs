@@ -129,31 +129,6 @@ namespace AOI
             return seen;
         }
 
-        // if (!TryGetValue(target, out var cur))
-            // {
-            //     return false;
-            // }
-            //
-            // if (cur.Count > 1)
-            // {
-            //     cur.Count--;
-            // }
-            // else
-            // {
-            //     while (cur != null)
-            //     {
-            //         var temp = cur;
-            //         cur.Top.Down = null;
-            //         cur = cur.Top;
-            //         CircuitBreaker(temp);
-            //         temp.Recycle();
-            //     }
-            // }
-            //
-            // Count--;
-            // return true;
-        // }
-
         /// <summary>
         /// Move
         /// </summary>
