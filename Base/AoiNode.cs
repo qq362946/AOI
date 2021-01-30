@@ -3,16 +3,14 @@
     public sealed class AoiNode
     {
         public float Value;
-        public int Layer;
-        public AoiEntity Entity;
+        public readonly int Layer;
+        public readonly AoiEntity Entity;
         public AoiNode Left;
         public AoiNode Right;
-        public AoiNode Top;
+        public readonly AoiNode Top;
         public AoiNode Down;
 
-        public AoiNode Init(int layer, float v = 0, AoiEntity entity = null, AoiNode left = null, AoiNode right = null,
-            AoiNode top = null,
-            AoiNode down = null)
+        public AoiNode (int layer, float v = 0, AoiEntity entity = null, AoiNode left = null, AoiNode right = null, AoiNode top = null, AoiNode down = null)
         {
             Layer = layer;
             Left = left;
@@ -21,21 +19,6 @@
             Down = down;
             Value = v;
             Entity = entity;
-
-            return this;
-        }
-
-        public void Recycle()
-        {
-            Value = 0;
-            Layer = 0;
-            Entity = null;
-            Left = null;
-            Right = null;
-            Top = null;
-            Down = null;
-    
-            AoiPool.Instance.Recycle(this);
         }
     }
 }

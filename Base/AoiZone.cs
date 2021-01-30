@@ -79,7 +79,7 @@ namespace AOI
         {
             if (_entityList.TryGetValue(key, out var entity)) return entity;
 
-            entity = AoiPool.Instance.Fetch<AoiEntity>().Init(key);
+            entity = new AoiEntity(key);
 
             entity.X = _xLinks.Add(x, entity);
             entity.Y = _yLinks.Add(y, entity);
@@ -276,14 +276,12 @@ namespace AOI
         /// <summary>
         /// Exit the AoiZone
         /// </summary>
-        /// <param name="key"></param>
         /// <param name="node"></param>
         public void Exit(AoiEntity node)
         {
-            _xLinks.Remove(node.Key, node.X.Value);
-            _yLinks.Remove(node.Key, node.Y.Value);
-            _entityList.Remove(node.Key);
-            node.Recycle();
+            _xLinks.Remove(node.X);
+            _yLinks.Remove(node.Y);
+            _entityList.Remove(node.Key); ;
         }
 
         /// <summary>

@@ -32,12 +32,11 @@ namespace AOI
             {
                 rLayer = _maxLayer;
 
-                var tempHeader = _header = AoiPool.Instance.Fetch<AoiNode>().Init(rLayer, target, entity);
+                var tempHeader = _header = new AoiNode(rLayer, target, entity);
 
                 for (var layer = _maxLayer - 1; layer >= 1; --layer)
                 {
-                    _header = _header.Down =
-                        AoiPool.Instance.Fetch<AoiNode>().Init(layer, target, top: _header);
+                    _header = _header.Down = new AoiNode(layer, target, top: _header);
                 }
 
                 _header = tempHeader;
@@ -51,11 +50,11 @@ namespace AOI
             for (var layer = _maxLayer; layer >= 1; --layer)
             {
                 while (cur.Right != null && cur.Right.Value < target) cur = cur.Right;
-
+                
                 if (layer <= rLayer)
                 {
-                    insertNode = AoiPool.Instance.Fetch<AoiNode>()
-                        .Init(layer, target, entity: entity, left: cur, right: cur.Right);
+                    insertNode = new AoiNode(layer, target, entity: entity, left: cur, right: cur.Right);
+                   
                     if (cur.Right != null) cur.Right.Left = insertNode;
                     cur.Right = insertNode;
 
@@ -104,29 +103,42 @@ namespace AOI
         /// <summary>
         /// Remove
         /// </summary>
+        /// <param name="node"></param>
+        public void Remove(AoiNode node)
+        {
+            var cur = node;
+            while (cur != null)
+            {
+                var tmp = cur;
+                CircuitBreaker(tmp);
+                cur = cur.Top;
+            }
+
+            Count--;
+        }
+
+        /// <summary>
+        /// Remove
+        /// </summary>
         /// <param name="key"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public bool Remove(long key, float target)
+        public void Remove(ref long key, ref float target)
         {
-            var seen = false;
             var cur = _header;
-            while (cur != null)
+            for (var layer = _maxLayer; layer >= 1; --layer)
             {
                 while (cur.Right != null && cur.Right.Value < target) cur = cur.Right;
 
                 if (cur.Right != null && cur.Right.Value - target <= _limit && cur.Right.Entity.Key == key)
                 {
-                    var tmp = cur.Right;
-                    CircuitBreaker(tmp);
-                    tmp.Recycle();
-                    seen = true;
+                    CircuitBreaker(cur.Right);
                 }
 
                 cur = cur.Down;
             }
 
-            return seen;
+            Count--;
         }
 
         /// <summary>
@@ -199,8 +211,7 @@ namespace AOI
         private void CircuitBreaker(AoiNode cur)
         {
             if (cur.Left != null) cur.Left.Right = cur.Right;
-            if (cur.Right == null) return;
-            cur.Right.Left = cur.Left;
+            if (cur.Right != null) cur.Right.Left = cur.Left;
             cur.Left = null;
             cur.Right = null;
         }
