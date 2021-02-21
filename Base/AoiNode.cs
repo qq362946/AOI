@@ -7,7 +7,7 @@
         public readonly AoiEntity Entity;
         public AoiNode Left;
         public AoiNode Right;
-        public readonly AoiNode Top;
+        public AoiNode Top;
         public AoiNode Down;
 
         public AoiNode (int layer, float v = 0, AoiEntity entity = null, AoiNode left = null, AoiNode right = null, AoiNode top = null, AoiNode down = null)

@@ -61,6 +61,7 @@ namespace AOI
                     if (lastLayerNode != null)
                     {
                         lastLayerNode.Down = insertNode;
+                        insertNode.Top = lastLayerNode;
                     }
 
                     lastLayerNode = insertNode;
