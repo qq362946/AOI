@@ -1,13 +1,12 @@
-AOI库介绍
-==========
+# 1、AOI库介绍
 
-<p>1.使用跳跃表+十字链方式实现的一个AOI库。</p>
-<p>2.可做简单的碰撞检测、客户端资源、服务器AOI。</p>
-<p>3.测试效率插入、移动、查找均到毫秒一下。</p>
+> 1. 使用跳跃表+十字链方式实现的一个AOI库。
+> 2. 可做简单的碰撞检测、客户端资源、服务器AOI。
+> 3. 测试效率插入、移动、查找均到毫秒一下。
 
-使用例子
-==========
-```csharp
+### 1.1 一个简单的Demo
+
+```c#
 var zone = new AoiZone();
 var area = new Vector2(3, 3);
 
@@ -27,7 +26,7 @@ foreach (var aoiKey in enters)
     Console.WriteLine($"X:{findEntity.X.Value} Y:{findEntity.Y.Value}");
 }
 
-// 更新key为50的坐标。
+// 更新key为3的坐标。
 
 var entity = zone.Refresh(3, 20, 20, new Vector2(3, 3), out enters);
 
@@ -51,9 +50,8 @@ foreach (var aoiKey in enters)
 
 zone.Exit(50);
 ```
-相关资料
-==========
-[AOI算法实现和原理（一）](https://zhuanlan.zhihu.com/p/56114206?from_voters_page=true)
-[AOI算法实现和原理（二）](https://zhuanlan.zhihu.com/p/345741408)
 
-  
+
+# 2、博客文章
+
+[AOI算法实现和原理（一）](https://zhuanlan.zhihu.com/p/56114206) [AOI算法实现和原理（二）](https://zhuanlan.zhihu.com/p/345741408)
