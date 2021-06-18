@@ -20,7 +20,7 @@ namespace AOI
         public AoiZone(float xLinksLimit, float yLinksLimit)
         {
             _xLinks = new AoiLinkedList(limit: xLinksLimit);
-            _yLinks = new AoiLinkedList(limit: xLinksLimit);
+            _yLinks = new AoiLinkedList(limit: yLinksLimit);
         }
 
         public AoiZone(int maxLayer, float xLinksLimit, float yLinksLimit)
