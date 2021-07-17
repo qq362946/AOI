@@ -26,7 +26,7 @@ namespace AOI.Old
         {
             if (_nodes.TryGetValue(id, out var node)) return node;
 
-            node = AoiPool.Instance.Fetch<AoiNode>().Init(id, x, y);
+            node = Pool<AoiNode>.Rent().Init(id, x, y);;
 
             _xLinks.Insert(node);
 

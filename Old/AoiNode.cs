@@ -43,19 +43,13 @@ namespace AOI.Old
         {
             Id = 0;
             
-            AoiPool.Instance.Recycle(Link.XNode);
-            
-            AoiPool.Instance.Recycle(Link.YNode);
-            
+            Pool<LinkedListNode<AoiNode>>.Return(Link.XNode);
+            Pool<LinkedListNode<AoiNode>>.Return(Link.YNode);
             Link.XNode = null;
-
             Link.YNode = null;
-            
             AoiInfo.MovesSet.Clear();
-            
             AoiInfo.MoveOnlySet.Clear();
-            
-            AoiPool.Instance.Recycle(this);
+            Pool<AoiNode>.Return(this);
         }
     }
 }

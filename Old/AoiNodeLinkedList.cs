@@ -40,7 +40,7 @@ namespace AOI.Old
         {
             if (First == null)
             {
-                node.Link.XNode = AddFirst(AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node).Value);
+                node.Link.XNode = AddFirst(Pool<LinkedListNode<AoiNode>>.Rent().Value = node);
             }
             else
             {
@@ -71,7 +71,9 @@ namespace AOI.Old
                         {
                             if (slowCursor.Value.Position.X >= node.Position.X)
                             {
-                                node.Link.XNode = AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node);
+                                var xNode = Pool<LinkedListNode<AoiNode>>.Rent();
+                                xNode.Value = node;
+                                node.Link.XNode = xNode;
 
                                 AddBefore(slowCursor,  node.Link.XNode);
 
@@ -85,7 +87,7 @@ namespace AOI.Old
 
                 if (node.Link.XNode == null)
                 {
-                    node.Link.XNode = AddLast(AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node).Value);
+                    node.Link.XNode = AddLast(Pool<LinkedListNode<AoiNode>>.Rent().Value = node);
                 }
             }
         }
@@ -94,7 +96,7 @@ namespace AOI.Old
         {
             if (First == null)
             {
-                node.Link.YNode = AddFirst(AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node).Value);
+                node.Link.YNode = AddFirst(Pool<LinkedListNode<AoiNode>>.Rent().Value = node);
             }
             else
             {
@@ -125,10 +127,9 @@ namespace AOI.Old
                         {
                             if (slowCursor.Value.Position.Y >= node.Position.Y)
                             {
-                                node.Link.YNode = AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node);
-
+                                node.Link.YNode = Pool<LinkedListNode<AoiNode>>.Rent();
+                                node.Link.YNode.Value = node;
                                 AddBefore(slowCursor,  node.Link.YNode);
-
                                 return;
                             }
 
@@ -139,7 +140,7 @@ namespace AOI.Old
 
                 if (node.Link.YNode == null)
                 {
-                    node.Link.YNode = AddLast(AoiPool.Instance.Fetch<LinkedListNode<AoiNode>>(node).Value);
+                    node.Link.YNode = AddLast(Pool<LinkedListNode<AoiNode>>.Rent().Value = node);
                 }
             }
         }

@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AOI
 {
-    public sealed class AoiEntity
+    public sealed class AoiEntity : IDisposable
     {
         public readonly long Key;
         public AoiNode X;
@@ -16,8 +17,16 @@ namespace AOI
         public AoiEntity(long key)
         {
             Key = key;
-            ViewEntity = new HashSet<long>();
-            ViewEntityBak = new HashSet<long>();
+            ViewEntity = Pool<HashSet<long>>.Rent();
+            ViewEntityBak = Pool<HashSet<long>>.Rent();
+        }
+
+        public void Dispose()
+        {
+            ViewEntity.Clear();
+            Pool<HashSet<long>>.Return(ViewEntity);
+            ViewEntityBak.Clear();
+            Pool<HashSet<long>>.Return(ViewEntityBak);
         }
     }
 }

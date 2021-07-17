@@ -249,7 +249,7 @@ namespace AOI
                     {
                         if (Distance(
                             new Vector2(node.X.Value, node.Y.Value),
-                            new Vector2(cur.Entity.X.Value, cur.Entity.Y.Value)) <= area.X)
+                            new Vector2(cur.Entity.X.Value, cur.Entity.Y.Value)) <= area.Y)
                         {
                             node.ViewEntity.Add(cur.Entity.Key);
                         }
@@ -281,7 +281,8 @@ namespace AOI
         {
             _xLinks.Remove(node.X);
             _yLinks.Remove(node.Y);
-            _entityList.Remove(node.Key); ;
+            _entityList.Remove(node.Key);
+            node.Dispose();
         }
 
         /// <summary>
